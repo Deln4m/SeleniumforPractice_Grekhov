@@ -15,7 +15,7 @@ public class Seleniumtestforprac
         options.AddArguments("--no-sandbox", "--start-maximized", "--disable-extensions");
         
         // -зайти в хром 
-        var driver = new ChromeDriver();
+        var driver = new ChromeDriver(options);
         
         // - url стафа https://staff-testing.testkontur.ru/
         driver.Navigate().GoToUrl("https://staff-testing.testkontur.ru/");
@@ -26,7 +26,6 @@ public class Seleniumtestforprac
         Login.SendKeys("Delnam@outlook.com");
         var Password = driver.FindElement(By.Name("Password"));
         Password.SendKeys("Suabru22b22-");
-
         var Submit = driver.FindElement(By.Name("button"));
         Submit.Click();
         Thread.Sleep(3000);
