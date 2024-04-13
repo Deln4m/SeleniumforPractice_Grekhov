@@ -26,7 +26,7 @@ public class Seleniumtestforprac
         Login.SendKeys("Delnam@outlook.com");
         var Password = driver.FindElement(By.Name("Password"));
         Password.SendKeys("Suabru22b22-");
-        Thread.Sleep(3000);
+
         var Submit = driver.FindElement(By.Name("button"));
         Submit.Click();
         Thread.Sleep(3000);
