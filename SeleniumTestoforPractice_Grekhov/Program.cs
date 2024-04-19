@@ -29,14 +29,14 @@ public class Seleniumtestforprac
         // Урла
         driver.Navigate().GoToUrl("https://staff-testing.testkontur.ru/");
         // Логин
-        var Login = driver.FindElement(By.Id("Username"));
-        Login.SendKeys("Delnam@outlook.com");
+        var login = driver.FindElement(By.Id("Username"));
+        login.SendKeys("Delnam@outlook.com");
         // Пароль
-        var Password = driver.FindElement(By.Name("Password"));
-        Password.SendKeys("Suabru22b22-");
+        var password = driver.FindElement(By.Name("Password"));
+        password.SendKeys("Suabru22b22-");
         // Клик
-        var Submit = driver.FindElement(By.CssSelector("[value='login']"));
-        Submit.Click();
+        var submit = driver.FindElement(By.CssSelector("[value='login']"));
+        submit.Click();
         // Ждём редирект
         WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         wait.Until(ExpectedConditions.UrlContains("https://staff-testing.testkontur.ru/news"));
@@ -51,17 +51,15 @@ public class Seleniumtestforprac
     public void SideMenuNavigation()
     {
         // Открыть боковое меню
-        var expandmenu = driver.FindElement(By.CssSelector("[data-tid='SidebarMenuButton']"));
-        expandmenu.Click();
+        var expandMenu = driver.FindElement(By.CssSelector("[data-tid='SidebarMenuButton']"));
+        expandMenu.Click();
         // Переход по вкладке "Сообщества"
         var communities = driver.FindElements(By.CssSelector("[data-tid='Community']"))
             .First(elemnt => elemnt.Displayed);
         communities.Click();
-        // Проверка юрла
-        var title = driver.FindElement(By.CssSelector("[data-tid='Title']"));
+        // Проверка урла
         Assert.That(driver.Url == "https://staff-testing.testkontur.ru/communities", 
             "На странице 'Сообщества' не тот урл");
-        TearDown();
     }
     
     // Проверка строки поиска (переход на страницу профиля пользователя)
@@ -69,21 +67,20 @@ public class Seleniumtestforprac
     public void Search()
     {
         // Клик на иконку поиска
-        var SearchIconSelect = driver.FindElement(By.CssSelector("[data-tid='Services']"));
-        SearchIconSelect.Click();
+        var searchIconSelect = driver.FindElement(By.CssSelector("[data-tid='Services']"));
+        searchIconSelect.Click();
         // Клик на строку поиска
-        var SearchBarSelect = driver.FindElement(By.CssSelector("[data-tid='SearchBar']"));
-        SearchBarSelect.Click();
-        // Ввод текста
-        var SearchBarType = driver.FindElement(By.CssSelector("[type='text']"));
-        SearchBarType.SendKeys("Даниил Грехов");
-        SearchBarType.Should().NotBeNull();
+        var searchBarSelect = driver.FindElement(By.CssSelector("[data-tid='SearchBar']"));
+        searchBarSelect.Click();
+        // Ввод текста 
+        var searchBarType = driver.FindElement(By.CssSelector("[type='text']"));
+        searchBarType.SendKeys("Даниил Грехов");
         // Клик на результат поиска 
-        var User = driver.FindElement(By.CssSelector("[title='Даниил Грехов']"));
-        User.Click();
-        // Проверка верности юрла
-        var position = driver.FindElement(By.CssSelector("[data-tid='Tabs']"));
-        position.Should().NotBeNull();
+        var user = driver.FindElement(By.CssSelector("[title='Даниил Грехов']"));
+        user.Click();
+        // Проверка верности редиректа
+        Assert.That(driver.Url == "https://staff-testing.testkontur.ru/profile/ddc96d3f-f5fd-4975-829f-375f6c3bb707", 
+            "Не тот урл");
     }
 
     // Проверка появления модалки журнала изменений по клику на версию
@@ -91,16 +88,15 @@ public class Seleniumtestforprac
     public void ModalMenu()
     {
         // Открываем боковое меню
-        var expandmenu = driver.FindElement(By.CssSelector("[data-tid='SidebarMenuButton']"));
-        expandmenu.Click();
+        var expandMenu = driver.FindElement(By.CssSelector("[data-tid='SidebarMenuButton']"));
+        expandMenu.Click();
         // Кликаем на версию
         var version = driver.FindElement(By.CssSelector("[data-tid='SidePage__container']"))
             .FindElement(By.CssSelector("[data-tid='Version']")); 
         version.Click();
         // Проверка на появление модалки
-        var OpenModal = driver.FindElement(By.CssSelector("[data-tid='modal-content']"));
-        OpenModal.Should().NotBeNull();
-
+        var openModal = driver.FindElement(By.CssSelector("[data-tid='modal-content']"));
+        openModal.Should().NotBeNull();
     }
     
     // Проверка кликабельности аватарки в профиле
@@ -109,15 +105,16 @@ public class Seleniumtestforprac
 
     public void AvatarClickable()
     {
-        // Переходим на юрлу профиля
+        // Переходим на урл профиля
         driver.Navigate().GoToUrl("https://staff-testing.testkontur.ru/profile/ddc96d3f-f5fd-4975-829f-375f6c3bb707");
-        // Кликаем на автаарку
-        var Avatar = driver.FindElement(By.CssSelector("[data-tid='PageHeader']"))
+        // Кликаем на аватарку
+        var avatar = driver.FindElement(By.CssSelector("[data-tid='PageHeader']"))
             .FindElement(By.CssSelector("[data-tid='Avatar']"));
-        Avatar.Click();
+        avatar.Click();
         // Проверяем, что открылось меню просмотра фотографии
-        var MenuCheck = driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div[2]/div/div"));
-        MenuCheck.Should().NotBeNull();
+        var menuCheck = driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div[2]/div/div"));
+        menuCheck.Should().NotBeNull();
+        Thread.Sleep(3000);
     }
     // kill chrome.exe 
     [TearDown]
