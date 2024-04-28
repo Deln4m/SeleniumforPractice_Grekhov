@@ -17,7 +17,7 @@ public class Seleniumtestforprac
     public void Setup()
     {
         var options = new ChromeOptions();
-        options.AddArguments("--no-sandbox", "--window-size=1920, 540", "--disable-extensions");
+        options.AddArguments("--no-sandbox", "--headless", "--disable-extensions");
         driver = new ChromeDriver(options);
         driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(15);
         Authorization();
@@ -40,9 +40,6 @@ public class Seleniumtestforprac
         // Ждём редирект
         WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
         wait.Until(ExpectedConditions.UrlContains("https://staff-testing.testkontur.ru/news"));
-        // Проверяем редирект
-        Assert.That(driver.Url == "https://staff-testing.testkontur.ru/news", 
-            "После авторизации не попадаем на урл Новостей");
     }
     
     
@@ -54,10 +51,12 @@ public class Seleniumtestforprac
         var expandMenu = driver.FindElement(By.CssSelector("[data-tid='SidebarMenuButton']"));
         expandMenu.Click();
         // Переход по вкладке "Сообщества"
-        var communities = driver.FindElements(By.CssSelector("[data-tid='Community']"))
-            .First(elemnt => elemnt.Displayed);
+        var communities = driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div/div[3]/div/div[1]/div[2]/div"))
+            .FindElement(By.CssSelector("[data-tid='Community']"));
         communities.Click();
         // Проверка урла
+        WebDriverWait waitCommunities = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+        waitCommunities.Until(ExpectedConditions.UrlContains("https://staff-testing.testkontur.ru/communities"));
         Assert.That(driver.Url == "https://staff-testing.testkontur.ru/communities", 
             "На странице 'Сообщества' не тот урл");
     }
@@ -80,7 +79,7 @@ public class Seleniumtestforprac
         user.Click();
         // Проверка верности редиректа
         Assert.That(driver.Url == "https://staff-testing.testkontur.ru/profile/ddc96d3f-f5fd-4975-829f-375f6c3bb707", 
-            "Не тот урл");
+            "На странице профиля не тот урл");
     }
 
     // Проверка появления модалки журнала изменений по клику на версию
@@ -108,13 +107,11 @@ public class Seleniumtestforprac
         // Переходим на урл профиля
         driver.Navigate().GoToUrl("https://staff-testing.testkontur.ru/profile/ddc96d3f-f5fd-4975-829f-375f6c3bb707");
         // Кликаем на аватарку
-        var avatar = driver.FindElement(By.CssSelector("[data-tid='PageHeader']"))
-            .FindElement(By.CssSelector("[data-tid='Avatar']"));
+        var avatar = driver.FindElement(By.CssSelector("[data-tid='PageHeader'] [data-tid='Avatar']"));
         avatar.Click();
         // Проверяем, что открылось меню просмотра фотографии
         var menuCheck = driver.FindElement(By.XPath("/html/body/div[2]/div/div[2]/div[2]/div/div"));
         menuCheck.Should().NotBeNull();
-        Thread.Sleep(3000);
     }
     // kill chrome.exe 
     [TearDown]
